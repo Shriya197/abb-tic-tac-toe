@@ -1,0 +1,264 @@
+#root {
+  min-height: 100vh;
+}
+
+.app {
+  width: min(1080px, 100%);
+  margin: 0 auto;
+  padding: 40px 24px 64px;
+}
+
+.app-header {
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: #b91c1c;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  color: #111827;
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  letter-spacing: -0.04em;
+}
+
+.subtitle {
+  max-width: 620px;
+  margin: 12px auto 0;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.8fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.game-panel,
+.side-panel > section {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+}
+
+.game-panel {
+  padding: 24px;
+}
+
+.side-panel {
+  display: grid;
+  gap: 24px;
+}
+
+.side-panel > section {
+  padding: 20px;
+}
+
+.mode-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin: 0 0 12px;
+  padding: 0;
+  border: 0;
+}
+
+.mode-selector legend {
+  width: 100%;
+  margin-bottom: 8px;
+  color: #374151;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.mode-selector label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #374151;
+  cursor: pointer;
+}
+
+.mode-selector input {
+  accent-color: #b91c1c;
+}
+
+.mode-hint {
+  margin: 0 0 20px;
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+.game-status {
+  margin: 0 0 20px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: #f9fafb;
+  color: #111827;
+  font-weight: 700;
+  text-align: center;
+}
+
+.game-status-over {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.game-board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  width: min(100%, 420px);
+  margin: 0 auto;
+  aspect-ratio: 1;
+}
+
+.game-cell {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border: 2px solid #d1d5db;
+  border-radius: 14px;
+  background: #f9fafb;
+  color: #111827;
+  font-size: clamp(2.5rem, 9vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease;
+}
+
+.game-cell:not(:disabled):hover {
+  border-color: #b91c1c;
+  background: #fff1f2;
+}
+
+.game-cell:disabled {
+  cursor: default;
+  opacity: 1;
+}
+
+.game-cell--winning {
+  border-color: #16a34a;
+  background: #dcfce7;
+  color: #166534;
+}
+
+.game-cell:focus-visible,
+.game-controls button:focus-visible,
+.mode-selector input:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+.game-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.game-controls button {
+  flex: 1 1 140px;
+  padding: 11px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #111827;
+  font-weight: 700;
+}
+
+.game-controls button:not(:disabled):hover {
+  border-color: #b91c1c;
+  background: #fff1f2;
+}
+
+.game-controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.side-panel h2 {
+  margin: 0 0 14px;
+  color: #111827;
+  font-size: 1.05rem;
+}
+
+.score-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+
+.score-list div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #f9fafb;
+}
+
+.score-list dt {
+  color: #4b5563;
+}
+
+.score-list dd {
+  margin: 0;
+  color: #111827;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.history-list {
+  display: grid;
+  gap: 8px;
+  max-height: 320px;
+  margin: 0;
+  padding-left: 20px;
+  overflow: auto;
+  color: #374151;
+}
+
+.history-list li::marker {
+  color: #9ca3af;
+  font-weight: 700;
+}
+
+.empty-state {
+  margin: 0;
+  color: #6b7280;
+}
+
+@media (max-width: 760px) {
+  .app {
+    padding: 28px 16px 48px;
+  }
+
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .game-panel {
+    padding: 18px;
+  }
+}
