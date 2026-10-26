@@ -1,181 +1,133 @@
 # ABB Tic Tac Toe
 
-A React implementation of the ABB technical assignment: a 3×3 Tic Tac Toe game with two-player and computer modes, move history, undo, and a separate scoreboard.
+A browser-based Tic Tac Toe application built using **React.js and JavaScript** as part of the ABB technical assignment.
 
-## 1. Overview
+The application supports two-player gameplay, a computer opponent, move history, undo functionality, win/draw detection, and a session-level scoreboard.
 
-The application supports:
+The project focuses on clean component architecture, predictable state management, reusable game logic, and testability.
 
-- Two-player local play.
-- A deterministic computer opponent.
-- Win, draw, and in-progress status detection.
-- Winning-cell highlighting.
-- Move history with derived move number, row, and column.
-- Two-player and computer-mode undo.
-- A scoreboard for X wins, O wins, and draws.
-- Reset Game and Reset Scoreboard actions.
-- Responsive, accessible UI.
+## 1. Features
 
-The application is frontend-only. It does not call a backend or external API.
+- **Two-Player Mode:** Two users play locally, alternating between X and O.
+- **Computer Mode:** Play as X against a computer-controlled O.
+- **Win Detection:** Detects wins across rows, columns, and diagonals.
+- **Draw Detection:** Identifies a draw when all cells are filled without a winner.
+- **Winning Cell Highlighting:** Highlights the cells forming the winning combination.
+- **Move History:** Records each move, including player, move number, and board position.
+- **Undo Last Move:** Restores the previous game state based on the selected mode.
+- **Scoreboard:** Tracks X wins, O wins, and draws across multiple games.
+- **Reset Game:** Starts a fresh game without resetting the scoreboard.
+- **Reset Scoreboard:** Clears the scores independently of the current game.
+- **Responsive UI:** Supports laptop and smaller screen sizes.
 
 ## 2. Tech Stack
 
-- React 19 with functional components
-- JavaScript ES6+
-- Vite
-- `useState` for state management
-- Props and callback functions
-- Pure JavaScript game logic
-- CSS Grid and standard CSS
-- Vitest
-- React Testing Library
-- `@testing-library/jest-dom`
-- `@testing-library/user-event`
-- jsdom
-- oxlint
-- Git and GitHub
+| Technology            | Purpose                                    |
+| --------------------- | ------------------------------------------ |
+| React 19              | UI development using functional components |
+| JavaScript (ES6+)     | Application and game logic                 |
+| Vite                  | Development server and production build    |
+| React `useState`      | Local state management                     |
+| CSS / CSS Grid        | Styling and responsive board layout        |
+| Vitest                | Unit testing                               |
+| React Testing Library | Component and interaction testing          |
+| Git & GitHub          | Version control and submission             |
 
-No TypeScript, `useReducer`, Redux/Zustand/MobX, React Context for game state, backend, REST API, Axios/fetch, mock API server, or database is used.
+The application runs entirely in the browser. No backend, external API, or database is required.
 
-## 3. Functional Features
+## 3. Getting Started
 
-### Game board
+### Prerequisites
 
-- Nine semantic `<button>` cells.
-- Cells start empty.
-- X and O alternate in two-player mode.
-- Occupied cells cannot be overwritten.
-- The board is disabled after a win or draw.
-- Winning cells receive a visible highlight.
+- Node.js 22.12+ (or a compatible version supported by the installed Vite release)
+- npm
+- Git
 
-### Game results
+### Installation
 
-`calculateGameResult(board)` is a pure function that returns:
+Clone the repository:
 
-```js
-{
-  status: "InProgress" | "Won" | "Draw",
-  winner: "X" | "O" | null,
-  winningCells: number[],
-}
+```bash
+git clone <repository-url>
+cd abb-tic-tac-toe
 ```
 
-All eight winning combinations are checked: three rows, three columns, and two diagonals.
-
-### Move history
-
-Each move stores only the player and cell index:
-
-```js
-{ player: "X", index: 4 }
-```
-
-The UI derives:
-
-- Move number from history order.
-- Row from `Math.floor(index / 3) + 1`.
-- Column from `(index % 3) + 1`.
-
-Rows and columns are displayed as 1-based values. Internal board indexes remain 0–8.
-
-### Undo
-
-- Two-player mode removes the last move.
-- Computer mode removes the latest human/computer pair.
-- If a human move has no computer response, computer-mode undo safely removes that single move.
-- Undo is disabled when there are no moves.
-- Undo is disabled after game completion per **Option A**.
-
-### Reset
-
-- **Reset Game** clears the board, history, and result, sets X active, preserves the scoreboard, and preserves the selected mode.
-- **Reset Scoreboard** clears X wins, O wins, and draws without changing the active board.
-
-### Computer mode
-
-- Human is X.
-- Computer is O.
-- The computer’s priority is:
-  1. Win immediately.
-  2. Block X’s immediate win.
-  3. Take the center.
-  4. Take an available corner.
-  5. Take any remaining empty cell.
-- Corners are chosen in fixed order: `0, 2, 6, 8`.
-- Remaining cells are chosen in fixed order: `1, 3, 5, 7`.
-- No Minimax is used.
-
-## 4. Frontend-Only Architecture
-
-This project intentionally omits .NET, REST APIs, databases, and server-side game state based on the recruiter’s clarification that the backend is not mandatory.
-
-The frontend owns:
-
-- Board state.
-- Move history.
-- Game mode.
-- Scoreboard.
-
-A real backend would own authoritative game state and validate every move. In this frontend-only version, the same validation rules are enforced in pure JavaScript functions.
-
-## 5. Local Setup
-
-Prerequisite: Node 22 LTS is recommended. Current Vite versions require a modern Node runtime; Node 20.19+ or 22.12+ is the practical minimum.
+Install dependencies:
 
 ```bash
 npm install
+```
+
+Start the development server:
+
+```bash
 npm run dev
 ```
 
-Open the local URL printed by Vite, usually:
+Open the local URL displayed in the terminal, usually:
+
+`http://localhost:5173`
+
+### Available Commands
+
+| Command              | Description                  |
+| -------------------- | ---------------------------- |
+| `npm run dev`        | Start the development server |
+| `npm test`           | Run the test suite           |
+| `npm run test:watch` | Run tests in watch mode      |
+| `npm run lint`       | Run code linting             |
+| `npm run build`      | Create the production build  |
+| `npm run preview`    | Preview the production build |
+
+## 4. Application Architecture
+
+The application follows a component-based architecture with a clear separation between **UI components, React state management, and game logic**.
+
+### Component Structure
 
 ```text
-http://localhost:5173/
+App
+├── GameModeSelector
+├── GameStatus
+├── GameBoard
+│   └── GameCell
+├── GameControls
+├── Scoreboard
+└── MoveHistory
 ```
 
-Available scripts:
+### Component Responsibilities
 
-```bash
-npm run dev        # start the development server
-npm test           # run all tests once
-npm run test:watch # run tests in watch mode
-npm run lint       # run oxlint
-npm run build      # create a production build in dist/
-npm run preview    # preview the production build locally
-```
+| Component          | Responsibility                                  |
+| ------------------ | ----------------------------------------------- |
+| `App`              | Owns game state, scoreboard, and event handlers |
+| `GameBoard`        | Renders the 3×3 board                           |
+| `GameCell`         | Renders an individual clickable cell            |
+| `GameStatus`       | Displays the current turn or game result        |
+| `GameModeSelector` | Allows switching between game modes             |
+| `GameControls`     | Handles Undo and Reset Game actions             |
+| `MoveHistory`      | Displays previously played moves                |
+| `Scoreboard`       | Displays scores and provides scoreboard reset   |
 
-## 6. Test Instructions
+**Why this architecture?**
 
-```bash
-npm test
-```
+The main `App` component owns the shared state. Child components receive the information they need through props and communicate user actions through callback functions.
 
-The test suite covers:
+This keeps responsibilities clear and avoids duplicating game state across multiple components.
 
-- Initial game state.
-- Valid moves.
-- Invalid moves: out-of-range index, occupied cell, wrong player, post-completion move.
-- Turn switching.
-- Row, column, and diagonal wins.
-- Draw detection.
-- Two-player undo.
-- Computer-mode undo, including an unmatched human move.
-- Undo disabled after completion.
-- Scoreboard updates exactly once.
-- Reset Game preserving the scoreboard.
-- Reset Scoreboard clearing counters.
-- Mode switching resetting the active board.
-- Computer win, block, center, corner, and fallback priority.
-- Computer not moving after completion.
-- Human win in computer mode without an extra computer move.
-- Rapid duplicate clicks.
+The game rules are implemented separately from React, making them easier to test and maintain.
 
-## 7. State-Management Design
+## 5. State Management
 
-Two `useState` values are used:
+The application uses React's built-in `useState` hook.
 
-```js
-const [game, setGame] = useState(() => createInitialGame("two-player"));
+Two main state variables are maintained:
+
+```jsx
+const [game, setGame] = useState(() =>
+  createInitialGame("two-player")
+);
+
 const [scoreboard, setScoreboard] = useState({
   X: 0,
   O: 0,
@@ -183,159 +135,498 @@ const [scoreboard, setScoreboard] = useState({
 });
 ```
 
-`game` contains:
+### Game State
 
-```js
+The `game` object contains:
+
+```javascript
 {
   board: Array(9).fill(null),
   moveHistory: [],
-  mode: "two-player" | "computer",
+  mode: "two-player"
 }
 ```
 
-Board, history, and mode belong to the same game session, so they change atomically through one `setGame` call. The scoreboard is separate because it outlives individual games and has a different reset policy.
+- `board` represents the nine cells.
+- `moveHistory` records the sequence of valid moves.
+- `mode` identifies the selected game mode.
 
-Derived values are not stored:
+These values are grouped because they belong to the same active game session and are updated together during game transitions.
 
-- `result = calculateGameResult(game.board)`
-- `currentPlayer` from `game.moveHistory.length % 2`
-- `isGameOver` from `result.status`
-- `canUndo` from history length and completion
-- `isHumanTurn` from mode and current player
+### Scoreboard State
 
-Pure helpers:
+The scoreboard is stored separately because its lifecycle differs from the current game.
 
-- `createInitialGame(mode)`
-- `calculateGameResult(board)`
-- `getCurrentPlayer(game)`
-- `isValidMove(game, index, player)`
-- `applyMove(game, index, player)`
-- `undoMove(game)`
-- `resetGame(game)`
-- `getComputerMove(board)`
+For example:
 
-The event handler calculates the complete next turn, including the computer response, before committing state:
+- Reset Game clears the active game but preserves scores.
+- Reset Scoreboard clears scores without modifying the active game.
 
-```js
-setGame(nextGame);
-commitScore(nextResult);
+### Derived State
+
+Values that can be calculated from existing state are not stored separately.
+
+These include:
+
+- Current player
+- Winner
+- Winning cells
+- Game status
+- Whether Undo is available
+
+For example:
+
+```javascript
+const currentPlayer =
+  game.moveHistory.length % 2 === 0
+    ? "X"
+    : "O";
+
+const result = calculateGameResult(game.board);
+
+const isGameOver = result.status !== "InProgress";
 ```
 
-The scoreboard is updated in the event handler, not in `useEffect` and not inside a state updater. This avoids double-counting and keeps updater functions pure, which matters because React StrictMode can invoke updaters more than once in development.
+**Why derive these values?**
 
-### History as state
+Storing the same information in multiple state variables can create inconsistencies.
 
-The board is the canonical source of truth for the current position. Move history is the canonical record of move order and ownership. They are updated together by pure transitions. Undo reconstructs the board from the remaining history, which guarantees the restored position matches the recorded sequence.
+For example, if the board changes but a separately stored winner is not updated, the UI may display an incorrect result.
 
-## 8. Computer Algorithm
+Deriving game status from the board ensures the displayed result is based on the current position.
 
-`src/game/computerLogic.js` exposes one main pure function:
+### Why `useState` Instead of Context or Redux?
 
-```js
-getComputerMove(board)
-```
+The application has a small component tree and a single common state owner.
 
-It returns a cell index or `null` when no move is available.
+Using `useState` with props is sufficient because:
 
-The implementation:
+- State ownership is clear.
+- Data flows from parent to child.
+- Updates are easier to trace.
+- No additional state-management library is required.
 
-1. Returns `null` if the game is already complete.
-2. Tries every empty cell for an immediate O win.
-3. Tries every empty cell to block an immediate X win.
-4. Chooses center index `4` if empty.
-5. Chooses the first empty corner in `[0, 2, 6, 8]`.
-6. Chooses the first empty remaining cell in `[1, 3, 5, 7]`.
-7. Returns `null` if no cell remains.
+React Context would become useful if many deeply nested components required shared access to the same state.
 
-The function is deterministic and does not mutate the board. It is intentionally not unbeatable; the assignment requires this priority strategy, not Minimax.
+For the current application, introducing Context or Redux would add unnecessary complexity.
 
-## 9. Clarifications and Assumptions
+## 6. How a Move Works
 
-- Backend, .NET, REST APIs, and databases are intentionally omitted per recruiter clarification.
-- X always starts.
-- In computer mode, the human is X and the computer is O.
-- The human cannot play O. The UI disables the board when it is not the human’s turn, and the click handler rejects non-human turns.
-- Move history stores the 0-based cell index; row and column are displayed as 1-based values.
-- A draw requires all nine cells to be occupied with no winner.
-- Switching game mode starts a fresh board and clears history; the scoreboard is preserved.
-- Reset Game preserves the selected mode and the scoreboard.
-- Reset Scoreboard clears only the scoreboard.
-- Scores are kept in memory and are lost on refresh. `sessionStorage` is not implemented.
-- If a board somehow contains multiple winning lines, the first combination in the fixed order is returned and highlighted.
-
-## 10. Undo Policy
-
-The project uses **Option A: Disable Undo After Completion**.
-
-Reasons:
-
-- A completed game has already incremented the scoreboard.
-- Allowing undo after completion would require deciding whether to reverse the score.
-- Disabling undo keeps the scoreboard consistent and avoids ambiguous game history.
-
-Behavior:
-
-- Two-player: remove the last move.
-- Computer: remove the last human/computer pair.
-- Computer with only a human move: remove that single move.
-- No moves: Undo disabled.
-- Game complete: Undo disabled.
-
-## 11. AI Usage Summary
-
-AI assistance was used as a pair-programming and teaching aid.
-
-AI-assisted work included:
-
-- Comparing multiple-`useState` versus single-game-object state designs.
-- Proposing the component tree and state ownership.
-- Drafting the pure game and computer logic.
-- Drafting React components and CSS.
-- Drafting Vitest and React Testing Library tests.
-- Running lint, production build, and the test suite.
-- Drafting this README.
-
-Verification performed during implementation:
-
-- `npm test` passes 43 tests across 4 test files.
-- `npm run lint` passes.
-- `npm run build` succeeds.
-
-No claim is made that every line was manually typed by the candidate. Before submission, the candidate should review the code, make at least the small modifications they can explain, and be prepared to describe which parts were AI-generated, which parts they changed, and how they verified behavior.
-
-No backend, REST API, mock server, or external database was generated.
-
-## 12. Known Limitations
-
-- No backend or persistent storage; scores reset on page refresh.
-- The computer is deterministic but not unbeatable, by design.
-- Only the first winning combination is highlighted if multiple lines are completed at once.
-- No sessionStorage or localStorage persistence.
-- No end-to-end browser tests; coverage is unit and component level.
-- No deployment URL yet.
-- The computer fallback order is defensive; in normal legal corner/center states, a win or block usually exists first.
-
-## 13. Future Enhancements
-
-- Add optional `sessionStorage` score persistence.
-- Add a Minimax or difficulty selector while preserving the required deterministic mode.
-- Add animations and sound feedback.
-- Add undo confirmation or a two-step score-safe undo policy.
-- Add Playwright end-to-end tests.
-- Add backend-owned game state and multiplayer rooms.
-- Add TypeScript if the project grows.
-- Add deployment automation.
-
-## 14. Optional Deployment Link
-
-Not deployed yet. For Vercel or Netlify:
-
-- Build command: `npm run build`
-- Output directory: `dist`
-- Install command: `npm install`
-
-Add the live URL here after deployment:
+When a player clicks a cell, the application follows this sequence:
 
 ```text
-https://your-deployment-url.example
+User clicks a cell
+        |
+        v
+Validate the move
+        |
+        v
+Check cell availability and game status
+        |
+        v
+Apply the player's move
+        |
+        v
+Update board and move history
+        |
+        v
+Calculate win or draw
+        |
+        v
+If computer mode and game continues:
+    Calculate and apply computer move
+        |
+        v
+Calculate final game result
+        |
+        v
+Update scoreboard if the game finishes
+        |
+        v
+React renders the updated UI
 ```
+
+The transition logic is separated into pure JavaScript functions.
+
+The event handler calculates the next game state, including the computer response where applicable, before committing the state update.
+
+This approach keeps move handling predictable and avoids unnecessary effects for the computer's decision-making.
+
+### Move Validation
+
+Before applying a move, the game checks that:
+
+1. The selected cell index is within the board.
+2. The cell is empty.
+3. The game is still in progress.
+4. The correct player is making the move.
+
+Invalid moves do not modify the current state.
+
+## 7. Game Logic
+
+Game logic is separated from React components and implemented using pure JavaScript functions.
+
+The main functions include:
+
+| Function                           | Responsibility                                 |
+| ---------------------------------- | ---------------------------------------------- |
+| `createInitialGame(mode)`          | Creates a fresh game                           |
+| `calculateGameResult(board)`       | Determines win, draw, or in-progress status    |
+| `getCurrentPlayer(game)`           | Determines whose turn it is                    |
+| `isValidMove(game, index, player)` | Validates a move                               |
+| `applyMove(game, index, player)`   | Calculates the next game state                 |
+| `undoMove(game)`                   | Restores the previous state                    |
+| `resetGame(game)`                  | Creates a fresh board while retaining the mode |
+| `getComputerMove(board)`           | Selects the computer's next move               |
+
+### Win Detection
+
+The game evaluates eight possible winning combinations:
+
+- Three horizontal rows
+- Three vertical columns
+- Two diagonals
+
+`calculateGameResult(board)` returns:
+
+```javascript
+{
+  status: "Won",
+  winner: "X",
+  winningCells: [0, 1, 2]
+}
+```
+
+The possible statuses are:
+
+- `InProgress`
+- `Won`
+- `Draw`
+
+The winning cell indices are used by the UI to highlight the winning combination.
+
+### Why Pure Functions?
+
+Pure functions:
+
+- Do not directly modify React state.
+- Do not mutate their inputs.
+- Produce predictable results for the same inputs.
+- Can be tested independently of React components.
+
+This separates game rules from UI rendering.
+
+## 8. Move History and Undo
+
+### Move History
+
+Each valid move is stored as an object:
+
+```javascript
+{
+  player: "X",
+  index: 4
+}
+```
+
+The move history is an ordered array:
+
+```javascript
+[
+  { player: "X", index: 0 },
+  { player: "O", index: 4 },
+  { player: "X", index: 2 }
+]
+```
+
+Move numbers and positions are derived rather than stored separately.
+
+For example:
+
+```javascript
+const moveNumber = historyIndex + 1;
+const row = Math.floor(index / 3) + 1;
+const column = (index % 3) + 1;
+```
+
+This avoids storing redundant information.
+
+### Undo Behavior
+
+Undo depends on the selected game mode.
+
+**Two-Player Mode**
+
+The latest move is removed from history, and the corresponding board position is restored.
+
+**Computer Mode**
+
+The latest human and computer moves are removed together, restoring the previous human turn.
+
+If only a human move exists, Undo can remove that single move.
+
+### How the Board Is Restored
+
+Instead of manually reversing every state field, Undo uses the remaining move history to reconstruct the board.
+
+```javascript
+const restoredBoard = Array(9).fill(null);
+
+remainingHistory.forEach((move) => {
+  restoredBoard[move.index] = move.player;
+});
+```
+
+This ensures the board matches the recorded sequence of moves.
+
+### Undo After Completion — Option A
+
+The application follows **Option A from the assignment: Disable Undo After Completion**.
+
+After a win or draw:
+
+- The completed result is final.
+- Undo is disabled.
+- The scoreboard remains unchanged.
+
+This avoids having to reverse previously recorded scores.
+
+## 9. Computer Opponent
+
+The computer uses a deterministic, rule-based algorithm.
+
+In computer mode:
+
+- Human plays X.
+- Computer plays O.
+- The computer automatically responds after a valid human move, provided the game has not ended.
+
+### Move Selection Priority
+
+| Priority | Rule                                      |
+| -------- | ----------------------------------------- |
+| 1        | Choose a move that immediately wins for O |
+| 2        | Block an immediate winning move for X     |
+| 3        | Take the center if available              |
+| 4        | Choose an available corner                |
+| 5        | Choose any remaining empty cell           |
+
+Corner selection order:
+
+`[0, 2, 6, 8]`
+
+Remaining-cell selection order:
+
+`[1, 3, 5, 7]`
+
+### Why a Rule-Based Algorithm?
+
+The assignment explicitly specifies the computer's priorities.
+
+A deterministic algorithm is sufficient because:
+
+- It directly implements the requirements.
+- It is easy to understand and debug.
+- Its decisions can be tested.
+- It avoids the additional complexity of Minimax.
+
+The computer is not intended to be unbeatable.
+
+## 10. Scoreboard
+
+The scoreboard tracks:
+
+```javascript
+{
+  X: 0,
+  O: 0,
+  draws: 0
+}
+```
+
+The score changes only when a game transitions from an in-progress state to a completed state.
+
+This prevents repeated counting when React re-renders a completed board.
+
+Scoreboard updates are coordinated by the game event handler, rather than triggered by an effect that watches the winner.
+
+### Reset Behavior
+
+| Action           | Board     | History   | Scoreboard |
+| ---------------- | --------- | --------- | ---------- |
+| Reset Game       | Cleared   | Cleared   | Preserved  |
+| Reset Scoreboard | Unchanged | Unchanged | Cleared    |
+| Change Mode      | Cleared   | Cleared   | Preserved  |
+
+Scores are maintained in memory for the current page session.
+
+Refreshing the page resets them because browser storage persistence is not implemented.
+
+## 11. Testing
+
+The application uses Vitest and React Testing Library.
+
+The tests focus on game logic, state transitions, and UI interactions.
+
+### Game Logic Tests
+
+- Initial game state
+- Valid and invalid moves
+- Player turn switching
+- Row, column, and diagonal wins
+- Draw detection
+- Invalid moves after game completion
+- Out-of-range and occupied-cell validation
+- Wrong-player validation
+
+### Undo and Reset Tests
+
+- Undo in two-player mode
+- Undo in computer mode
+- Undo with an unmatched human move
+- Undo disabled after completion
+- Reset Game preserving scoreboard
+- Reset Scoreboard clearing scores
+- Game-mode switching
+
+### Computer Tests
+
+- Winning move selection
+- Blocking move selection
+- Center selection
+- Corner selection
+- Fallback selection
+- No move after game completion
+- Human win without an additional computer move
+
+### UI Tests
+
+- Board interactions
+- Correct player and status display
+- Disabled cells
+- Move history updates
+- Rapid duplicate clicks
+
+### Run Tests
+
+```bash
+npm test
+```
+
+### Code Quality Checks
+
+```bash
+npm run lint
+npm run build
+```
+
+**Test results recorded during development:**
+
+- 43 tests across 4 files
+- Lint checks passed
+- Production build succeeded
+
+These results should be rechecked against the final submitted commit.
+
+## 12. Design Decisions and Trade-offs
+
+| Decision                        | Reason                                                         |
+| ------------------------------- | -------------------------------------------------------------- |
+| React `useState`                | Sufficient for the small application and clear state ownership |
+| Parent-owned game state         | Keeps related state coordinated                                |
+| Props over Context              | Shallow component hierarchy without significant prop drilling  |
+| Pure game logic                 | Separates business rules from rendering and simplifies testing |
+| Derived game status             | Avoids redundant state and inconsistencies                     |
+| Move history for Undo           | Makes previous positions straightforward to reconstruct        |
+| Synchronous computer response   | Keeps the complete turn transition predictable                 |
+| Disable Undo after completion   | Keeps finalized scoreboard results consistent                  |
+| Deterministic computer strategy | Directly matches the assignment requirements                   |
+| Frontend-only implementation    | Matches the recruiter's backend-optional clarification         |
+
+### Backend Considerations
+
+The original assignment includes .NET and REST API requirements.
+
+Based on the recruiter's clarification that the backend is optional, this submission implements all game operations locally in React and JavaScript.
+
+There are no actual REST endpoints.
+
+If a backend were added later, it would become responsible for validating moves, managing sessions, recording history, and maintaining the scoreboard. React would render the state received from the server.
+
+## 13. Assumptions and Limitations
+
+### Assumptions
+
+- X always starts.
+- The human controls X in computer mode.
+- The computer controls O.
+- Switching game modes starts a new board while preserving scores.
+- Reset Game preserves the selected mode.
+- Undo is disabled after game completion.
+- Board indices are 0-based internally and displayed as 1-based rows and columns.
+- Scores exist only during the current page session.
+
+### Known Limitations
+
+- No backend or shared multiplayer state.
+- Scores do not survive page refreshes.
+- The computer is deterministic but not unbeatable.
+- Only the first detected winning combination is highlighted when multiple winning lines exist.
+- No end-to-end browser testing.
+- No live deployment URL is currently provided.
+
+## 14. AI-Assisted Development
+
+AI-assisted tools were used during development to support implementation, architectural discussions, and testing.
+
+Areas of assistance included:
+
+- Evaluating state-management approaches.
+- Discussing component separation and state ownership.
+- Drafting game and computer logic.
+- Assisting with React components and styling.
+- Drafting unit and interaction tests.
+- Preparing documentation.
+
+Key areas for manual review include move validation, game-result detection, score consistency, mode-specific undo, and computer move priorities.
+
+
+
+## 15. Future Improvements
+
+Potential improvements include:
+
+- `sessionStorage` or `localStorage` persistence.
+- Difficulty levels and a Minimax-based opponent.
+- Animations and sound effects.
+- Playwright end-to-end tests.
+- Backend-managed sessions and multiplayer functionality.
+- TypeScript for stronger type safety if the project grows.
+- Automated deployment through GitHub integration.
+
+## 16. Deployment
+
+The application can be deployed as a static Vite application using Vercel or Netlify.
+
+Production build:
+
+```bash
+npm run build
+```
+
+Preview locally:
+
+```bash
+npm run preview
+```
+
+Suggested deployment settings:
+
+| Setting          | Value           |
+| ---------------- | --------------- |
+| Build command    | `npm run build` |
+| Output directory | `dist`          |
+| Install command  | `npm install`   |
+
+**Live application:** Not deployed yet.
